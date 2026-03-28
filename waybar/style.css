@@ -1,0 +1,320 @@
+* {
+    font-family:
+        "JetBrains Mono Nerd Font", "JetBrains Mono", "FontAwesome 6 Free",
+        monospace;
+    font-size: 14px;
+    font-weight: 500;
+    min-height: 0;
+    border: none;
+    border-radius: 0;
+}
+
+/* ── Catppuccin Mocha palette ───────────────────────────── */
+@define-color base    #1e1e2e;
+@define-color mantle  #181825;
+@define-color crust   #11111b;
+@define-color surface0 #313244;
+@define-color surface1 #45475a;
+@define-color surface2 #585b70;
+@define-color overlay0 #6c7086;
+@define-color text    #cdd6f4;
+@define-color subtext0 #a6adc8;
+@define-color subtext1 #bac2de;
+@define-color blue    #89b4fa;
+@define-color lavender #b4befe;
+@define-color sapphire #74c7ec;
+@define-color sky     #89dceb;
+@define-color teal    #94e2d5;
+@define-color green   #a6e3a1;
+@define-color yellow  #f9e2af;
+@define-color peach   #fab387;
+@define-color red     #f38ba8;
+@define-color mauve   #cba6f7;
+@define-color flamingo #f2cdcd;
+
+/* ── Bar ────────────────────────────────────────────────── */
+window#waybar {
+    background: alpha(@base, 0.88);
+    border: 1px solid alpha(@surface1, 0.55);
+    border-radius: 12px;
+    color: @text;
+    transition: background 0.3s ease;
+}
+
+window#waybar.hidden {
+    opacity: 0.1;
+}
+
+/* ── All modules base ───────────────────────────────────── */
+#custom-arch,
+#workspaces,
+#window,
+#mpd,
+#pulseaudio,
+#cpu,
+#memory,
+#temperature,
+#language,
+#clock,
+#network,
+#custom-separator,
+#tray,
+#custom-power {
+    color: @text;
+    padding: 0 10px;
+}
+
+/* ══════════════════════════════
+   LEFT
+══════════════════════════════ */
+
+#custom-arch {
+    font-size: 17px;
+    color: @blue;
+    padding: 0 14px 0 12px;
+    background: alpha(@surface0, 0.5);
+    border-radius: 10px;
+    transition:
+        color 0.2s,
+        background 0.2s;
+}
+
+#custom-arch:hover {
+    color: @lavender;
+    background: alpha(@surface1, 0.7);
+}
+
+#workspaces {
+    background: alpha(@surface0, 0.4);
+    padding: 0 6px;
+    margin: 4px;
+    border-radius: 8px;
+}
+
+#workspaces button {
+    font-size: 14px;
+    color: @surface2;
+    background: transparent;
+    padding: 0 4px;
+    border-radius: 6px;
+    min-width: 28px;
+}
+
+#workspaces button:hover {
+    color: @subtext1;
+    background: alpha(@surface1, 0.5);
+}
+
+#workspaces button.active,
+#workspaces button.focused {
+    font-size: 14px;
+    color: @blue;
+    background: alpha(@blue, 0.16);
+    min-width: 28px;
+    padding: 0 4px;
+}
+
+#workspaces button.urgent {
+    color: @red;
+    background: alpha(@red, 0.16);
+    animation: blink-urgent 0.8s steps(2) infinite;
+}
+
+@keyframes blink-urgent {
+    to {
+        background: alpha(@red, 0.32);
+    }
+}
+
+#window {
+    color: @subtext1;
+    font-size: 14px;
+    padding: 0 8px;
+}
+
+/* ══════════════════════════════
+   CENTER
+══════════════════════════════ */
+
+#mpd {
+    color: @teal;
+    font-size: 14px;
+    padding: 0 10px;
+}
+
+#mpd.disconnected,
+#mpd.stopped {
+    opacity: 0;
+    min-width: 0;
+    padding: 0;
+}
+
+#mpd.paused {
+    color: @subtext0;
+}
+
+#pulseaudio {
+    color: @yellow;
+}
+
+#pulseaudio.muted {
+    color: @overlay0;
+}
+
+#cpu {
+    color: @green;
+}
+
+#memory {
+    color: @mauve;
+}
+
+#temperature {
+    color: @peach;
+}
+
+#temperature.critical {
+    color: @red;
+    animation: blink-temp 0.5s steps(2) infinite;
+}
+
+@keyframes blink-temp {
+    to {
+        color: alpha(@red, 0.5);
+    }
+}
+
+/* ══════════════════════════════
+   RIGHT
+══════════════════════════════ */
+
+/* Language pill */
+#language {
+    color: @sapphire;
+    background: alpha(@sapphire, 0.1);
+    border: 1px solid alpha(@sapphire, 0.15);
+    border-radius: 10px;
+    margin: 4px 2px;
+    padding: 0 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    font-size: 14px;
+    min-width: 28px;
+}
+
+#language:hover {
+    background: alpha(@sapphire, 0.2);
+}
+
+/* Clock — highlighted block */
+#clock {
+    color: @lavender;
+    background: alpha(@surface0, 0.65);
+    border: 1px solid alpha(@surface1, 0.5);
+    border-radius: 10px;
+    margin: 4px 4px;
+    padding: 0 14px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    transition: background 0.2s;
+}
+
+#clock:hover {
+    background: alpha(@surface1, 0.75);
+}
+
+/* Network */
+#network {
+    color: @sky;
+    background: alpha(@sky, 0.08);
+    border: 1px solid alpha(@sky, 0.15);
+    border-radius: 10px;
+    margin: 4px 2px;
+    transition: background 0.2s;
+}
+
+#network:hover {
+    background: alpha(@sky, 0.2);
+}
+
+#network.disconnected {
+    color: @red;
+    background: alpha(@red, 0.08);
+    border: 1px solid alpha(@red, 0.15);
+    border-radius: 10px;
+    transition: background 0.2s;
+}
+
+#network.disconnected:hover {
+    background: alpha(@red, 0.2);
+}
+
+/* Clipboard */
+#custom-clipboard {
+    font-size: 15px;
+    color: @teal;
+    background: alpha(@teal, 0.08);
+    border-radius: 10px;
+    margin: 4px 2px;
+    padding: 0 12px;
+}
+
+#custom-clipboard:hover {
+    background: alpha(@teal, 0.2);
+}
+
+/* Separator */
+#custom-separator {
+    color: @surface2;
+    padding: 0 4px;
+    font-size: 14px;
+}
+
+/* Tray */
+#tray {
+    background: alpha(@surface0, 0.4);
+    border-radius: 10px;
+    margin: 4px;
+    padding: 0 8px;
+}
+
+#tray > .passive {
+    -gtk-icon-effect: dim;
+}
+
+#tray > .needs-attention {
+    -gtk-icon-effect: highlight;
+    background: alpha(@red, 0.15);
+    border-radius: 10px;
+}
+
+/* Power button */
+#custom-power {
+    font-size: 15px;
+    color: @flamingo;
+    background: alpha(@red, 0.1);
+    border-radius: 10px;
+    padding: 0 14px 0 12px;
+    transition:
+        color 0.2s,
+        background 0.2s;
+}
+
+#custom-power:hover {
+    color: @red;
+    background: alpha(@red, 0.25);
+}
+
+/* ── Tooltip ────────────────────────────────────────────── */
+tooltip {
+    background: @mantle;
+    border: 1px solid @surface1;
+    border-radius: 10px;
+    padding: 2px 0;
+}
+
+tooltip label {
+    padding: 2px 12px;
+    color: @text;
+}

@@ -1,0 +1,171 @@
+// -*- mode: jsonc -*-
+{
+  "layer": "top",
+  "height": 30,
+  "spacing": 0,
+  "margin-top": 6,
+  "margin-left": 10,
+  "margin-right": 10,
+
+  "modules-left": ["custom/arch", "hyprland/workspaces", "hyprland/window"],
+  "modules-center": ["mpd", "pulseaudio", "cpu", "temperature", "memory"],
+  "modules-right": [
+    "hyprland/language",
+    "clock",
+    "network",
+    "custom/clipboard",
+    "custom/separator",
+    "tray",
+    "custom/power",
+  ],
+
+  // ── Left ────────────────────────────────────────────────
+
+  "custom/arch": {
+    "format": "󰣇",
+    "tooltip": false,
+    "on-click": "rofi -show drun -theme ~/.config/rofi/catppuccin.rasi",
+  },
+
+  "hyprland/workspaces": {
+    "format": "{icon}",
+    "on-click": "activate",
+    "format-icons": {
+      "1": "󰲠",
+      "2": "󰲢",
+      "3": "󰲤",
+      "4": "󰲦",
+      "5": "󰲨",
+      "6": "󰲪",
+      "7": "󰲬",
+      "8": "󰲮",
+      "9": "󰲰",
+      "urgent": "󱓻",
+      "active": "󰮯",
+      "default": "󰊠",
+    },
+    "sort-by-number": true,
+    "persistent-workspaces": {},
+  },
+
+  "hyprland/window": {
+    "format": "{}",
+    "max-length": 40,
+    "separate-outputs": true,
+    "rewrite": {
+      "(.*) — Mozilla Firefox": "󰈹  $1",
+      "(.*) — Firefox": "󰈹  $1",
+      "(.*) - Helium": "󰖟  $1",
+      "(.*) Steam": "  $1",
+      "": "󰇄  Desktop",
+    },
+  },
+
+  // ── Center ──────────────────────────────────────────────
+
+  "mpd": {
+    "format": "󰝚 {artist} – {title}",
+    "format-paused": "󰏤 {artist} – {title}",
+    "format-stopped": "",
+    "format-disconnected": "",
+    "max-length": 38,
+    "interval": 2,
+    "tooltip-format": "󰝚 {artist} – {album}\n{title}  [{elapsedTime:%M:%S}/{totalTime:%M:%S}]",
+    "on-click": "mpc toggle",
+    "on-click-right": "mpc next",
+    "on-scroll-up": "mpc vol +5",
+    "on-scroll-down": "mpc vol -5",
+  },
+
+  "pulseaudio": {
+    "format": "{icon}  {volume}%",
+    "format-muted": "󰝟 Muted",
+    "format-bluetooth": "󰂰 {volume}%",
+    "format-bluetooth-muted": "󰂲",
+    "format-icons": {
+      "headphone": "󰋋",
+      "hands-free": "󰋎",
+      "headset": "󰋎",
+      "default": ["󰕿", "󰖀", "󰕾"],
+    },
+    "on-click": "bash ~/.config/waybar/scripts/audio-menu.sh",
+    "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+    "on-scroll-up": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 2%+",
+    "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 2%-",
+    "tooltip": false,
+  },
+
+  "cpu": {
+    "interval": 2,
+    "format": "󰻠 {usage}%",
+    "tooltip": false,
+  },
+
+  "temperature": {
+    "hwmon-path": "/sys/class/hwmon/hwmon4/temp1_input",
+    "critical-threshold": 90,
+    "format": "{icon} {temperatureC}°C",
+    "format-critical": "󰸁 {temperatureC}°C",
+    "format-icons": ["󱃃", "󰔏", "󱃂"],
+    "tooltip": false,
+    "interval": 2,
+  },
+
+  "memory": {
+    "interval": 5,
+    "format": "󰍛 {percentage}%",
+    "tooltip-format": "{used:0.1f} GB / {total:0.1f} GB",
+  },
+
+  // ── Right ───────────────────────────────────────────────
+
+  "hyprland/language": {
+    "format": "{}",
+    "format-en": "en",
+    "format-ru": "ru",
+    "on-click": "hyprctl switchxkblayout all next",
+    "tooltip": false,
+  },
+
+  "clock": {
+    "format": "󱑂  {:%I:%M:%S %p}",
+    "format-alt": "󰃭  {:%a, %d %b %Y}",
+    "interval": 1,
+    "tooltip-format": "<tt><small>{calendar}</small></tt>",
+  },
+
+  "network": {
+    "format-wifi": "{icon}  {essid}",
+    "format-ethernet": "󰈀  {ipaddr}",
+    "format-disconnected": "󰤭  Disconnected",
+    "format-linked": "󰈀  {ifname}",
+    "tooltip-format-wifi": "{essid}  {signalStrength}%\n󰩟  {ipaddr}",
+    "tooltip-format-ethernet": "󰈀 {ifname}\n󰩟  {ipaddr}/{cidr}",
+    "on-click": "bash ~/.config/waybar/scripts/wifi-menu.sh",
+    "interval": 1,
+    "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
+  },
+
+  "custom/clipboard": {
+    "format": "󰅌",
+    "tooltip-format": "Clipboard history",
+    "on-click": "bash ~/.config/waybar/scripts/clipboard-menu.sh",
+    "on-click-right": "wl-copy --clear && notify-send 'Clipboard' 'History cleared' --icon=edit-clear -t 2000",
+  },
+
+  "custom/separator": {
+    "format": "│",
+    "tooltip": false,
+  },
+
+  "tray": {
+    "icon-size": 16,
+    "spacing": 8,
+  },
+
+  "custom/power": {
+    "format": "⏻",
+    "tooltip-format": "Power menu",
+    "on-click": "wlogout -p layer-shell -b 3 -c 0 -r 0 --css ~/.config/wlogout/style.css --layout ~/.config/wlogout/layout",
+  },
+}

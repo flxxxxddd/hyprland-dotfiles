@@ -1,0 +1,96 @@
+* {
+    font-family: "JetBrains Mono Nerd Font", monospace;
+    background-image: none;
+    box-shadow: none;
+}
+
+window {
+    background-color: rgba(17, 17, 27, 0.9);
+}
+
+button {
+    color: #cdd6f4;
+    font-size: 14px;
+    font-weight: 600;
+    background-color: rgba(49, 50, 68, 0.7);
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgba(69, 71, 90, 0.7);
+    border-radius: 20px;
+    background-repeat: no-repeat;
+    background-position: center 35%;
+    background-size: 64px 64px;
+    margin: 16px;
+    padding-top: 100px;
+    padding-bottom: 20px;
+    outline: none;
+}
+
+button:hover {
+    outline: none;
+}
+
+button:focus {
+    outline: none;
+    border-color: #89b4fa;
+}
+
+#lock {
+    background-image: image(url("/usr/share/wlogout/icons/lock.png"));
+}
+#lock:hover {
+    background-image: image(url("/usr/share/wlogout/icons/lock.png"));
+    background-color: rgba(180, 190, 254, 0.18);
+    border-color: #b4befe;
+    color: #b4befe;
+}
+
+#logout {
+    background-image: image(url("/usr/share/wlogout/icons/logout.png"));
+}
+#logout:hover {
+    background-image: image(url("/usr/share/wlogout/icons/logout.png"));
+    background-color: rgba(148, 226, 213, 0.18);
+    border-color: #94e2d5;
+    color: #94e2d5;
+}
+
+#suspend {
+    background-image: image(url("/usr/share/wlogout/icons/suspend.png"));
+}
+#suspend:hover {
+    background-image: image(url("/usr/share/wlogout/icons/suspend.png"));
+    background-color: rgba(137, 220, 235, 0.18);
+    border-color: #89dceb;
+    color: #89dceb;
+}
+
+#hibernate {
+    background-image: image(url("/usr/share/wlogout/icons/hibernate.png"));
+}
+#hibernate:hover {
+    background-image: image(url("/usr/share/wlogout/icons/hibernate.png"));
+    background-color: rgba(203, 166, 247, 0.18);
+    border-color: #cba6f7;
+    color: #cba6f7;
+}
+
+#reboot {
+    background-image: image(url("/usr/share/wlogout/icons/reboot.png"));
+}
+#reboot:hover {
+    background-image: image(url("/usr/share/wlogout/icons/reboot.png"));
+    background-color: rgba(249, 226, 175, 0.18);
+    border-color: #f9e2af;
+    color: #f9e2af;
+}
+
+#shutdown {
+    background-image: image(url("/usr/share/wlogout/icons/shutdown.png"));
+}
+#shutdown:hover {
+    background-image: image(url("/usr/share/wlogout/icons/shutdown.png"));
+    background-color: rgba(243, 139, 168, 0.18);
+    border-color: #f38ba8;
+    color: #f38ba8;
+}

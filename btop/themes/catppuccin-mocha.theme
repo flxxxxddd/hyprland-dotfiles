@@ -1,0 +1,77 @@
+# Catppuccin Mocha theme for btop++
+# ~/.config/btop/themes/catppuccin-mocha.theme
+
+# Main background
+theme[main_bg]="#1e1e2e"
+
+# Main text color
+theme[main_fg]="#cdd6f4"
+
+# Title color for boxes
+theme[title]="#89b4fa"
+
+# Highlight color for selected items
+theme[hi_fg]="#cba6f7"
+
+# Background color of selected/highlighted items
+theme[selected_bg]="#313244"
+
+# Foreground color of selected/highlighted items
+theme[selected_fg]="#cdd6f4"
+
+# Color of inactive/disabled text
+theme[inactive_fg]="#6c7086"
+
+# Color of text appearing on top of graphs
+theme[graph_text]="#a6adc8"
+
+# Misc color for box borders
+theme[meter_bg]="#313244"
+
+# Proc box outline color
+theme[proc_misc]="#94e2d5"
+
+# CPU box outline color
+theme[cpu_box]="#89b4fa"
+
+# Memory/disks box outline color
+theme[mem_box]="#cba6f7"
+
+# Net box outline color
+theme[net_box]="#94e2d5"
+
+# Processes box outline color
+theme[proc_box]="#89dceb"
+
+# Box divider line color
+theme[div_line]="#45475a"
+
+# Temperature color gradient: cold -> hot
+theme[temp_start]="#a6e3a1"
+theme[temp_mid]="#f9e2af"
+theme[temp_end]="#f38ba8"
+
+# CPU graph color gradient
+theme[cpu_start]="#89dceb"
+theme[cpu_mid]="#89b4fa"
+theme[cpu_end]="#cba6f7"
+
+# Memory graph color gradient
+theme[mem_start]="#a6e3a1"
+theme[mem_mid]="#94e2d5"
+theme[mem_end]="#89b4fa"
+
+# Net download graph color gradient
+theme[download_start]="#a6e3a1"
+theme[download_mid]="#94e2d5"
+theme[download_end]="#89b4fa"
+
+# Net upload graph color gradient
+theme[upload_start]="#f9e2af"
+theme[upload_mid]="#fab387"
+theme[upload_end]="#f38ba8"
+
+# Process color gradient
+theme[process_start]="#89b4fa"
+theme[process_mid]="#cba6f7"
+theme[process_end]="#f5c2e7"
