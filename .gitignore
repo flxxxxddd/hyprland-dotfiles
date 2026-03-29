@@ -31,5 +31,8 @@
 !zed/**
 
 !dolphinrc
+!pavucontrol.toml
+!starship.toml
+!README.md
 
 !.gitignore
