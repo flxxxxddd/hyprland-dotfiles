@@ -1,7 +1,4 @@
-/**
- * Catppuccin Mocha — Clipboard menu
- * ~/.config/rofi/catppuccin-clipboard.rasi
- */
+// rofi clipboard menu theme
 
 * {
     bg0:      #1e1e2e;

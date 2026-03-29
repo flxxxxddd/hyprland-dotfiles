@@ -1,7 +1,4 @@
-/**
- * Catppuccin Mocha — Wi-Fi dropdown
- * ~/.config/rofi/catppuccin-wifi.rasi
- */
+// rofi wifi menu theme
 
 * {
     bg0:     #1e1e2e;

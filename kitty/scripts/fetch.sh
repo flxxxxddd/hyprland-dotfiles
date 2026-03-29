@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
-# ~/.config/fetch.sh — Catppuccin Mocha system info
-# chmod +x ~/.config/fetch.sh && add to ~/.bashrc or ~/.config/fish/config.fish
+# replacement of fastfetch; beauty styled system info
 
-# ── Palette ──────────────────────────────────────────────────
+# palette
 R='\033[0m'
 B0='\033[38;2;30;30;46m'        # base
 S0='\033[38;2;49;50;68m'        # surface0
@@ -22,7 +21,7 @@ RD='\033[38;2;243;139;168m'     # red
 MV='\033[38;2;203;166;247m'     # mauve
 PK='\033[38;2;245;194;231m'     # pink
 
-# ── Helpers ──────────────────────────────────────────────────
+# helpers
 bar() {
     # bar <value 0-100> <width> <fill_color> <empty_color>
     local val=$1 width=$2 fc=$3 ec=$4
@@ -42,7 +41,7 @@ row() {
     printf "  ${1}${2}${R}  ${3}%-8s${R}  ${5}%s${R}\n" "$4" "$6"
 }
 
-# ── Gather info ───────────────────────────────────────────────
+# gather info
 USER_NAME="${USER:-$(whoami)}"
 HOST_NAME="$(hostname)"
 OS=$(grep "^PRETTY_NAME" /etc/os-release 2>/dev/null | cut -d'"' -f2 | sed 's/ Linux//')
@@ -53,7 +52,7 @@ SHELL_NAME=$(basename "$SHELL")
 TERM_NAME="${TERM_PROGRAM:-${TERM:-kitty}}"
 UPTIME=$(uptime -p 2>/dev/null | sed 's/up //' | sed 's/ hours\?/h/' | sed 's/ minutes\?/m/' | sed 's/ days\?/d/')
 
-# CPU
+# cpu
 CPU_MODEL=$(grep "model name" /proc/cpuinfo 2>/dev/null | head -1 \
     | sed 's/.*: //' \
     | sed 's/(R)//g;s/(TM)//g' \
@@ -66,7 +65,7 @@ CPU_USAGE=$(top -bn1 2>/dev/null | grep "Cpu(s)" | awk '{print int($2)}')
 CPU_TEMP=$(cat /sys/class/hwmon/hwmon4/temp1_input 2>/dev/null)
 [[ -n "$CPU_TEMP" ]] && CPU_TEMP="$(( CPU_TEMP / 1000 ))°C" || CPU_TEMP=""
 
-# RAM
+# ram
 MEM_TOTAL=$(grep MemTotal /proc/meminfo | awk '{print int($2/1024)}')
 MEM_AVAIL=$(grep MemAvailable /proc/meminfo | awk '{print int($2/1024)}')
 MEM_USED=$(( MEM_TOTAL - MEM_AVAIL ))
@@ -74,14 +73,14 @@ MEM_PCT=$(( MEM_USED * 100 / MEM_TOTAL ))
 MEM_USED_G=$(awk "BEGIN{printf \"%.1f\", $MEM_USED/1024}")
 MEM_TOTAL_G=$(awk "BEGIN{printf \"%.1f\", $MEM_TOTAL/1024}")
 
-# Disk
+# disk
 DISK_INFO=$(df -h / 2>/dev/null | tail -1)
 DISK_USED=$(echo "$DISK_INFO" | awk '{print $3}')
 DISK_TOTAL=$(echo "$DISK_INFO" | awk '{print $2}')
 DISK_PCT=$(echo "$DISK_INFO" | awk '{print $5}' | tr -d '%')
 [[ -z "$DISK_PCT" ]] && DISK_PCT=0
 
-# GPU
+# gpu
 GPU_MODEL=$(lspci 2>/dev/null | grep -i "vga\|3d\|display" | head -1 \
     | sed 's/.*: //' \
     | sed 's/(.*)//' \
@@ -90,7 +89,7 @@ GPU_MODEL=$(lspci 2>/dev/null | grep -i "vga\|3d\|display" | head -1 \
     | sed 's/Advanced Micro Devices, Inc. //' \
     | cut -c1-36)
 
-# Packages
+# packages
 PKGS=""
 if command -v pacman &>/dev/null; then
     PKGS="$(pacman -Q 2>/dev/null | wc -l) (pacman)"
@@ -98,7 +97,7 @@ elif command -v dpkg &>/dev/null; then
     PKGS="$(dpkg -l 2>/dev/null | grep ^ii | wc -l) (dpkg)"
 fi
 
-# ── Palette swatches ─────────────────────────────────────────
+# swatches palette
 swatches() {
     printf "  "
     local colors=("$RD" "$PE" "$YL" "$GR" "$TL" "$BL" "$MV" "$PK")
@@ -108,13 +107,13 @@ swatches() {
     printf "\n"
 }
 
-# ── Render ───────────────────────────────────────────────────
+# render
 echo
-# Header
+# header
 printf "  ${BL}󰣇${R}  ${LV}%s${R}${S1}@${R}${BL}%s${R}\n" "$USER_NAME" "$HOST_NAME"
 line
 
-# System
+# system
 row "$MV" "" "$OV" "os"     "$TX" "󰣇 $OS"
 row "$MV" "" "$OV" "kernel" "$TX" "$KERNEL"
 row "$MV" "" "$OV" "wm"     "$TX" "$WM"
@@ -122,7 +121,7 @@ row "$SK" "" "$OV" "term"   "$TX" "$TERM_NAME"
 row "$SK" "" "$OV" "shell"  "$TX" "$SHELL_NAME"
 line
 
-# Hardware
+# hardware
 printf "  ${GR}󰻠${R}  ${OV}%-8s${R}  ${TX}%s${R}" "cpu" "$CPU_MODEL"
 [[ -n "$CPU_TEMP" ]] && printf "  ${PE}%s${R}" "$CPU_TEMP"
 printf "\n"
@@ -143,11 +142,11 @@ printf "  ${TX}%s / %s${R}  ${OV}%d%%${R}\n" "$DISK_USED" "$DISK_TOTAL" "$DISK_P
 
 line
 
-# Extras
+# extras
 row "$YL" "󱑂" "$OV" "uptime"  "$TX" "$UPTIME"
 [[ -n "$PKGS" ]] && row "$YL" "󰏗" "$OV" "pkgs" "$TX" "$PKGS"
 line
 
-# Color swatches
+# color swatches
 swatches
 echo

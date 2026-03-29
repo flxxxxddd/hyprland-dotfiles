@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# ~/.config/waybar/scripts/system-monitor-menu.sh
+# system monitor menu via rofi with btop and nvtop
 
 ROFI_THEME="$HOME/.config/rofi/catppuccin-audio.rasi"
 TERMINAL="kitty"
@@ -142,7 +142,7 @@ open_mission_center() {
     elif command -v mission-center >/dev/null 2>&1; then
         mission-center >/dev/null 2>&1 &
     else
-        notify "mission center not found!\nRun: sudo pacman -S mission-center"
+        notify "mission center not installed!\nInstall it with: sudo pacman -S mission-center"
     fi
 }
 

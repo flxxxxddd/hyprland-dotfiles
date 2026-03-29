@@ -1,7 +1,4 @@
-/**
- * Catppuccin Mocha — Bluetooth menu
- * ~/.config/rofi/catppuccin-bluetooth.rasi
- */
+// rofi bluetooth menu theme
 
 * {
     bg0:      #1e1e2e;

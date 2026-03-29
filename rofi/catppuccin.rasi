@@ -1,7 +1,4 @@
-/**
- * Catppuccin Mocha — Rofi theme
- * ~/.config/rofi/catppuccin.rasi
- */
+// default rofi theme
 
 * {
     bg0:     #1e1e2e;
@@ -56,7 +53,7 @@ inputbar {
 prompt {
     background-color: transparent;
     text-color:       @blue;
-    font:             "JetBrains Mono Nerd Font Bold 13";
+    font:             "Caskaydia Mono Nerd Font Bold 13";
 }
 
 entry {

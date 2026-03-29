@@ -20,7 +20,7 @@
     "custom/power",
   ],
 
-  // ── Left ────────────────────────────────────────────────
+  // left modules
 
   "custom/arch": {
     "format": "󰣇",
@@ -69,7 +69,7 @@
     },
   },
 
-  // ── Center ──────────────────────────────────────────────
+  // center modules
 
   "mpd": {
     "format": "󰝚 {artist} – {title}",
@@ -128,7 +128,7 @@
     "on-click": "bash ~/.config/waybar/scripts/system-monitor-menu.sh memory",
   },
 
-  // ── Right ───────────────────────────────────────────────
+  // right modules
 
   "hyprland/language": {
     "format": "{}",

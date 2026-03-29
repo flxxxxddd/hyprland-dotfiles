@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# ~/.config/waybar/scripts/clipboard-menu.sh
+# clipboard menu via rofi + cliphist
 
 ROFI_THEME="$HOME/.config/rofi/catppuccin-clipboard.rasi"
 
@@ -13,7 +13,7 @@ notify() {
 }
 
 if ! command -v cliphist &>/dev/null; then
-    notify "cliphist not installed!"
+    notify "cliphist not installed!\nInstall it with: sudo pacman -S cliphist"
     exit 1
 fi
 
@@ -24,7 +24,7 @@ while IFS=$'\t' read -r id content; do
     [[ -z "$id" ]] && continue
 
     if [[ "$content" == "[[ binary data"* ]]; then
-        # Extract size only e.g. "3 KiB"
+        # extract size only e.g. "3 KiB"
         size=$(echo "$content" | grep -oP '\d+ \w+iB' | head -1)
         display="󰋩  [Image  $size]"
     else

@@ -1,7 +1,4 @@
-/**
- * Catppuccin Mocha — Audio menu
- * ~/.config/rofi/catppuccin-audio.rasi
- */
+// rofi audio menu theme
 
 * {
     bg0:      #1e1e2e;

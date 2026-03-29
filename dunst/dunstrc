@@ -1,11 +1,10 @@
-# dunstrc — Catppuccin Mocha
-# ~/.config/dunst/dunstrc
+# dunst themed configuration
 
 [global]
     monitor = 0
     follow = mouse
 
-    # Geometry
+    # geometry
     width = (0, 380)
     height = (0, 200)
     origin = top-right
@@ -13,7 +12,7 @@
     scale = 0
     notification_limit = 5
 
-    # Appearance
+    # appearance
     frame_color = "#45475a"
     frame_width = 1
     gap_size = 6
@@ -23,9 +22,9 @@
     background = "#1e1e2eee"
     foreground = "#cdd6f4"
 
-    font = JetBrains Mono Nerd Font 12
+    font = Caskaydia Mono Nerd Font 12
 
-    # Text
+    # text
     markup = full
     format = "<b>%s</b>\n%b"
     alignment = left
@@ -35,32 +34,32 @@
     ellipsize = middle
     show_indicators = yes
 
-    # Icon
+    # icon
     icon_theme = "Papirus-Dark, hicolor"
     icon_position = left
     min_icon_size = 32
     max_icon_size = 48
 
-    # Behaviour
+    # behaviour
     sort = urgency_descending
     idle_threshold = 120
     show_age_threshold = 60
     sticky_history = yes
     history_length = 20
 
-    # Timeouts (ms)
+    # timeouts (ms)
     timeout = 5000
 
-    # Dmenu / browser
+    # dmenu / browser
     dmenu = /usr/bin/rofi -dmenu -theme ~/.config/rofi/catppuccin.rasi -p dunst
     browser = /usr/bin/xdg-open
 
-    # Mouse
+    # mouse
     mouse_left_click = close_current
     mouse_middle_click = do_action, close_current
     mouse_right_click = close_all
 
-    # Progress bar
+    # progress bar
     progress_bar = true
     progress_bar_height = 8
     progress_bar_frame_width = 1
@@ -68,7 +67,7 @@
     progress_bar_max_width = 300
     progress_bar_corner_radius = 4
 
-    # Padding
+    # padding
     padding = 12
     horizontal_padding = 14
     text_icon_padding = 10

@@ -1,3 +1,5 @@
+# nano configuration
+
 set numbercolor cyan
 set keycolor bold,cyan
 set functioncolor green
@@ -12,5 +14,7 @@ set constantshow
 set indicator
 set backup
 set backupdir ~/.local/share/nano/backups
+
+# syntax highlighting
 include /usr/share/nano/*.nanorc
 include /usr/share/nano/extra/*.nanorc

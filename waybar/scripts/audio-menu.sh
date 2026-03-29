@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# ~/.config/waybar/scripts/audio-menu.sh
+# audio-menu via rofi + wpctl (volume control) + pactl (microphone control)
 
 ROFI_THEME="$HOME/.config/rofi/catppuccin-audio.rasi"
 
-# ── Icons ────────────────────────────────────────────────────
+# icons
 ICO_SINK="󰕾"
 ICO_SINK_MID="󰖀"
 ICO_SINK_LOW="󰕿"
@@ -18,7 +18,7 @@ ICO_MUTE_TOGGLE="󰖁"
 ICO_SOURCE="󰒓"
 ICO_CHECK="󰄬"
 
-# ── Helpers ──────────────────────────────────────────────────
+# helpers
 
 rofi_run() {
     rofi -dmenu -theme "$ROFI_THEME" -location 0 "$@"
@@ -74,7 +74,7 @@ vol_icon() {
     fi
 }
 
-# ── Volume bar (unicode blocks) ──────────────────────────────
+# volume bar (unicode blocks)
 vol_bar() {
     local vol=$1
     local filled=$(( vol / 5 ))
@@ -86,7 +86,7 @@ vol_bar() {
     echo "$bar"
 }
 
-# ── Get current sink info ────────────────────────────────────
+# get current sink info
 get_sink_info() {
     SINK_VOL=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ 2>/dev/null \
         | awk '{v=$2*100; printf "%d", v}')
@@ -113,7 +113,7 @@ get_source_info() {
     [[ -z "$SRC_DESC" ]] && SRC_DESC="$SRC_NAME"
 }
 
-# ── Sub-menus ────────────────────────────────────────────────
+# sub-menus
 
 menu_output_volume() {
     get_sink_info
@@ -296,7 +296,7 @@ menu_set_source() {
     notify "Input: $(echo "$choice" | sed "s/$ICO_MIC  //;s/ $ICO_CHECK//")"
 }
 
-# ── Main menu ────────────────────────────────────────────────
+# main menu
 
 main() {
     get_sink_info

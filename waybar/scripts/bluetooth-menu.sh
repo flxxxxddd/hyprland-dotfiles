@@ -1,6 +1,6 @@
 
 #!/usr/bin/env bash
-# ~/.config/waybar/scripts/bluetooth-menu.sh
+# bluetooth menu via rofi + bluetoothctl
 
 ROFI_THEME="$HOME/.config/rofi/catppuccin-bluetooth.rasi"
 
@@ -23,20 +23,20 @@ notify() {
         notify-send "Bluetooth" "$1" --icon=bluetooth -t 3000 2>/dev/null
 }
 
-# ── Check bluetoothctl ───────────────────────────────────────
+# check bluetoothctl
 if ! command -v bluetoothctl &>/dev/null; then
-    notify "bluetoothctl not found!\nRun: sudo pacman -S bluez bluez-utils"
+    notify "bluetoothctl not installed!\nInstall it with: sudo pacman -S bluez bluez-utils"
     exit 1
 fi
 
-# ── Get BT state ─────────────────────────────────────────────
+# get bt state
 bt_power() {
     bluetoothctl show 2>/dev/null | grep -i "powered:" | awk '{print $2}'
 }
 
 bt_on() { [[ "$(bt_power)" == "yes" ]]; }
 
-# ── Get devices ──────────────────────────────────────────────
+# get paired devices
 get_paired_devices() {
     bluetoothctl devices Paired 2>/dev/null | while read -r _ mac name; do
         [[ -z "$mac" ]] && continue
@@ -60,7 +60,7 @@ scan_devices() {
     done
 }
 
-# ── Connect to device ─────────────────────────────────────────
+# pair and connect device
 pair_and_connect_device() {
     local mac="$1" name="$2"
 
@@ -77,6 +77,7 @@ pair_and_connect_device() {
     fi
 }
 
+# connect device
 connect_device() {
     local mac="$1" name="$2"
     notify "Connecting to $name..."
@@ -92,31 +93,31 @@ disconnect_device() {
         || notify "Failed to disconnect"
 }
 
-# ── Main ─────────────────────────────────────────────────────
+# main
 main() {
     local entries=()
     declare -A MAC_MAP
     declare -A STATE_MAP
 
-    # Power toggle
+    # power toggle
     if bt_on; then
         entries+=("$ICO_BT_OFF  Turn Bluetooth OFF")
     else
         entries+=("$ICO_BT_ON  Turn Bluetooth ON")
-        # Show menu even when off
+        # show menu even when off
         CHOICE=$(printf '%s\n' "${entries[@]}" | rofi_run -p "$ICO_BT  Bluetooth" -i -format "i" -selected-row 0)
         [[ -z "$CHOICE" ]] && exit 0
         bluetoothctl power on &>/dev/null && notify "Bluetooth enabled"
         exit 0
     fi
 
-    # Scan toggle
+    # scan toggle
     entries+=("$ICO_SCAN  Start scanning for devices")
 
-    # Separator
+    # separator
     entries+=("───────────────────────────────")
 
-    # Paired/connected devices
+    # paired/connected devices
     local has_paired_devices=false
     while IFS='|' read -r display mac state _name; do
         [[ -z "$mac" ]] && continue
@@ -130,7 +131,7 @@ main() {
         entries+=("  No paired devices")
     fi
 
-    # Available scanned devices
+    # available scanned devices
     local has_available_devices=false
     while IFS='|' read -r display mac state _name; do
         [[ -z "$mac" ]] && continue
@@ -144,7 +145,7 @@ main() {
         entries+=("  No scanned devices")
     fi
 
-    # Show rofi
+    # show rofi
     CHOICE=$(printf '%s\n' "${entries[@]}" | rofi_run \
         -p "$ICO_BT  Bluetooth" \
         -i \
@@ -155,26 +156,26 @@ main() {
 
     local chosen="${entries[$CHOICE]}"
 
-    # Power off
+    # power off
     if [[ "$chosen" == *"Turn Bluetooth OFF"* ]]; then
         bluetoothctl power off &>/dev/null && notify "Bluetooth disabled"
         exit 0
     fi
 
-    # Scan
+    # scan
     if [[ "$chosen" == *"Start scanning"* ]]; then
         notify "Scanning for 10 seconds..."
         bluetoothctl --timeout 10 scan on &>/dev/null
-        # Refresh menu after scan
+        # refresh menu after scan
         sleep 1
         main
         return
     fi
 
-    # Separator or empty
+    # separator or empty
     [[ "$chosen" == "─────"* || "$chosen" == *"No paired"* || "$chosen" == *"No scanned"* ]] && exit 0
 
-    # Device action
+    # device action
     local mac="${MAC_MAP[$chosen]}"
     local state="${STATE_MAP[$chosen]}"
     local name="$chosen"
@@ -190,7 +191,7 @@ main() {
     [[ -z "$mac" ]] && exit 0
 
     if [[ "$state" == "connected" ]]; then
-        # Ask: disconnect or remove
+        # ask: disconnect or remove
         local action
         action=$(printf "󰂰  Stay connected\n󰂲  Disconnect\n󰩰  Remove device" | rofi_run \
             -p "  $name" -i -format "i" -selected-row 0)

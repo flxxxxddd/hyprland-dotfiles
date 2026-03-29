@@ -9,7 +9,7 @@
     border-radius: 0;
 }
 
-/* ── Catppuccin Mocha palette ───────────────────────────── */
+/* palette (catppuccin mocha) */
 @define-color base    #1e1e2e;
 @define-color mantle  #181825;
 @define-color crust   #11111b;
@@ -32,7 +32,7 @@
 @define-color mauve   #cba6f7;
 @define-color flamingo #f2cdcd;
 
-/* ── Bar ────────────────────────────────────────────────── */
+/* bar */
 window#waybar {
     background: alpha(@base, 0.88);
     border: 1px solid alpha(@surface1, 0.55);
@@ -45,7 +45,7 @@ window#waybar.hidden {
     opacity: 0.1;
 }
 
-/* ── All modules base ───────────────────────────────────── */
+/* all modules base */
 #custom-arch,
 #workspaces,
 #window,
@@ -66,9 +66,7 @@ window#waybar.hidden {
     padding: 0 10px;
 }
 
-/* ══════════════════════════════
-   LEFT
-══════════════════════════════ */
+/* left modules */
 
 #custom-arch {
     font-size: 17px;
@@ -134,9 +132,7 @@ window#waybar.hidden {
     padding: 0 8px;
 }
 
-/* ══════════════════════════════
-   CENTER
-══════════════════════════════ */
+/* center modules */
 
 #mpd {
     color: @teal;
@@ -186,11 +182,8 @@ window#waybar.hidden {
     }
 }
 
-/* ══════════════════════════════
-   RIGHT
-══════════════════════════════ */
+/* right modules */
 
-/* Language pill */
 #language {
     color: @sapphire;
     background: alpha(@sapphire, 0.1);
@@ -208,7 +201,6 @@ window#waybar.hidden {
     background: alpha(@sapphire, 0.2);
 }
 
-/* Clock — highlighted block */
 #clock {
     color: @lavender;
     background: alpha(@surface0, 0.65);
@@ -226,7 +218,6 @@ window#waybar.hidden {
     background: alpha(@surface1, 0.75);
 }
 
-/* Network */
 #network {
     color: @sky;
     background: alpha(@sky, 0.08);
@@ -252,7 +243,6 @@ window#waybar.hidden {
     background: alpha(@red, 0.2);
 }
 
-/* Bluetooth */
 #custom-bluetooth {
     font-size: 15px;
     color: @blue;
@@ -267,7 +257,6 @@ window#waybar.hidden {
     background: alpha(@blue, 0.2);
 }
 
-/* Clipboard */
 #custom-clipboard {
     font-size: 15px;
     color: @teal;
@@ -282,14 +271,15 @@ window#waybar.hidden {
     background: alpha(@teal, 0.2);
 }
 
-/* Separator */
+/* separator */
 #custom-separator {
     color: @surface2;
     padding: 0 4px;
     font-size: 14px;
 }
 
-/* Tray */
+/* tray */
+
 #tray {
     background: alpha(@surface0, 0.4);
     border-radius: 10px;
@@ -307,7 +297,7 @@ window#waybar.hidden {
     border-radius: 10px;
 }
 
-/* Power button */
+/* power button */
 #custom-power {
     font-size: 15px;
     color: @flamingo;
@@ -324,7 +314,7 @@ window#waybar.hidden {
     background: alpha(@red, 0.25);
 }
 
-/* ── Tooltip ────────────────────────────────────────────── */
+/* tooltip */
 tooltip {
     background: @mantle;
     border: 1px solid @surface1;

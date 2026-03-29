@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
-# ~/.config/waybar/scripts/wifi-menu.sh
-# Wi-Fi menu via nmcli + rofi
+# wi-fi menu via nmcli + rofi
 
 ROFI_THEME="$HOME/.config/rofi/catppuccin-wifi.rasi"
 ICO_WIFI=("󰤯" "󰤟" "󰤢" "󰤥" "󰤨")
@@ -28,13 +27,13 @@ get_password() {
 }
 
 main() {
-    # Get active connection at top level — accessible everywhere
+    # get active connection at top level - accessible everywhere
     ACTIVE_SSID=$(nmcli -t -f NAME,TYPE connection show --active \
         | grep ':802-11-wireless' | cut -d: -f1 | head -1)
     ACTIVE_DEV=$(nmcli -t -f DEVICE,TYPE device status \
         | grep ':wifi' | cut -d: -f1 | head -1)
 
-    # Build list
+    # build list
     local entries=()
 
     if [[ -n "$ACTIVE_SSID" ]]; then
@@ -59,7 +58,7 @@ main() {
     entries+=("$ICO_RESCAN  Rescan")
     entries+=("$ICO_MANUAL  Manual connection")
 
-    # Show rofi
+    # show rofi
     local choice
     choice=$(printf '%s\n' "${entries[@]}" | rofi -dmenu \
         -theme "$ROFI_THEME" \
@@ -69,7 +68,7 @@ main() {
 
     [[ -z "$choice" ]] && exit 0
 
-    # Rescan
+    # rescan
     if [[ "$choice" == *"Rescan"* ]]; then
         nmcli device wifi rescan 2>/dev/null
         sleep 2
@@ -77,7 +76,7 @@ main() {
         return
     fi
 
-    # Disconnect — use device disconnect which always works
+    # disconnect — use device disconnect which always works
     if [[ "$choice" == *"Disconnect"* ]]; then
         if [[ -n "$ACTIVE_DEV" ]]; then
             nmcli device disconnect "$ACTIVE_DEV"
@@ -87,7 +86,7 @@ main() {
         exit 0
     fi
 
-    # Manual SSID
+    # manual ssid
     if [[ "$choice" == *"Manual connection"* ]]; then
         local ssid
         ssid=$(rofi -dmenu \
@@ -104,18 +103,18 @@ main() {
         exit 0
     fi
 
-    # Extract SSID — strip icon + spaces from start, take first word
+    # extract ssid — strip icon + spaces from start, take first word
     local ssid
     ssid=$(echo "$choice" | sed 's/^[^ ]*[[:space:]]*//' | awk '{print $1}')
     [[ -z "$ssid" ]] && exit 0
 
-    # Already saved — just bring up
+    # already saved — just bring up
     if nmcli connection show "$ssid" &>/dev/null; then
         nmcli connection up "$ssid"
         exit 0
     fi
 
-    # New network — check security
+    # new network — check security
     local security
     security=$(nmcli -t -f SSID,SECURITY device wifi list \
         | grep -m1 "^${ssid}:" | cut -d: -f2)

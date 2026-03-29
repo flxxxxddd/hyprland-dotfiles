@@ -1,3 +1,5 @@
+// rofi config
+
 configuration {
     click-to-exit: true;
     steal-focus: true;
