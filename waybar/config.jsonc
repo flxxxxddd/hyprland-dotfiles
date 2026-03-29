@@ -13,6 +13,7 @@
     "hyprland/language",
     "clock",
     "network",
+    "custom/bluetooth",
     "custom/clipboard",
     "custom/separator",
     "tray",
@@ -57,6 +58,7 @@
       "(.*) — Firefox": "󰈹  $1",
       "(.*) - Helium": "󰖟  $1",
       "(.*) Steam": "  $1",
+      "Telegram(.*)": " $1",
       "": "󰇄  Desktop",
     },
   },
@@ -99,6 +101,7 @@
     "interval": 2,
     "format": "󰻠 {usage}%",
     "tooltip": false,
+    "on-click": "bash ~/.config/waybar/scripts/system-monitor-menu.sh cpu",
   },
 
   "temperature": {
@@ -109,12 +112,14 @@
     "format-icons": ["󱃃", "󰔏", "󱃂"],
     "tooltip": false,
     "interval": 2,
+    "on-click": "bash ~/.config/waybar/scripts/system-monitor-menu.sh temp",
   },
 
   "memory": {
     "interval": 5,
     "format": "󰍛 {percentage}%",
     "tooltip-format": "{used:0.1f} GB / {total:0.1f} GB",
+    "on-click": "bash ~/.config/waybar/scripts/system-monitor-menu.sh memory",
   },
 
   // ── Right ───────────────────────────────────────────────
@@ -144,6 +149,13 @@
     "on-click": "bash ~/.config/waybar/scripts/wifi-menu.sh",
     "interval": 1,
     "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
+  },
+
+  "custom/bluetooth": {
+    "format": "󰂯",
+    "tooltip": false,
+    "on-click": "bash ~/.config/waybar/scripts/bluetooth-menu.sh",
+    "interval": "once",
   },
 
   "custom/clipboard": {

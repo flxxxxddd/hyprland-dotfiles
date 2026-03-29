@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 # ~/.config/waybar/scripts/audio-menu.sh
-# Beautiful PulseAudio/PipeWire control via Rofi — Catppuccin Mocha
 
 ROFI_THEME="$HOME/.config/rofi/catppuccin-audio.rasi"
 
@@ -28,6 +27,41 @@ rofi_run() {
 notify() {
     command -v notify-send &>/dev/null && \
         notify-send "Audio" "$1" --icon=audio-volume-high -t 2000 2>/dev/null
+}
+
+get_volume_percent() {
+    local target="$1"
+    wpctl get-volume "$target" 2>/dev/null | awk '{v=$2*100; printf "%d", v}'
+}
+
+is_muted() {
+    local target="$1"
+    wpctl get-volume "$target" 2>/dev/null | grep -q MUTED && echo "yes" || echo "no"
+}
+
+notify_volume() {
+    local label="$1" target="$2"
+    local volume muted
+    volume=$(get_volume_percent "$target")
+    muted=$(is_muted "$target")
+
+    if [[ "$muted" == "yes" ]]; then
+        notify "$label muted"
+    else
+        notify "$label: ${volume}%"
+    fi
+}
+
+adjust_volume() {
+    local target="$1" delta="$2" label="$3"
+    wpctl set-volume "$target" "$delta"
+    notify_volume "$label" "$target"
+}
+
+set_volume() {
+    local target="$1" value="$2" label="$3"
+    wpctl set-volume "$target" "$value"
+    notify_volume "$label" "$target"
 }
 
 vol_icon() {
@@ -79,38 +113,127 @@ get_source_info() {
     [[ -z "$SRC_DESC" ]] && SRC_DESC="$SRC_NAME"
 }
 
-# ── List all sinks ───────────────────────────────────────────
-list_sinks() {
-    local default
-    default=$(pactl get-default-sink 2>/dev/null)
-    pactl list sinks short 2>/dev/null | while read -r idx name _; do
-        local desc
-        desc=$(pactl list sinks 2>/dev/null \
-            | grep -A5 "Name: $name" \
-            | grep "Description:" | head -1 \
-            | sed 's/.*Description: //' | cut -c1-42)
-        local mark=""
-        [[ "$name" == "$default" ]] && mark=" $ICO_CHECK"
-        printf "%s  %s%s\n" "$ICO_SINK" "$desc" "$mark"
-    done
-}
-
-list_sources() {
-    local default
-    default=$(pactl get-default-source 2>/dev/null)
-    pactl list sources short 2>/dev/null | grep -v "monitor" | while read -r idx name _; do
-        local desc
-        desc=$(pactl list sources 2>/dev/null \
-            | grep -A5 "Name: $name" \
-            | grep "Description:" | head -1 \
-            | sed 's/.*Description: //' | cut -c1-42)
-        local mark=""
-        [[ "$name" == "$default" ]] && mark=" $ICO_CHECK"
-        printf "%s  %s%s\n" "$ICO_MIC" "$desc" "$mark"
-    done
-}
-
 # ── Sub-menus ────────────────────────────────────────────────
+
+menu_output_volume() {
+    get_sink_info
+
+    local sink_ico
+    sink_ico=$(vol_icon "$SINK_VOL" "$SINK_MUTED")
+    local bar
+    bar=$(vol_bar "$SINK_VOL")
+
+    local header
+    [[ "$SINK_MUTED" == "yes" ]] \
+        && header="$ICO_MUTED  Muted  —  $SINK_DESC" \
+        || header="$sink_ico  ${SINK_VOL}%  $bar  $SINK_DESC"
+
+    local mute_label="$ICO_MUTE_TOGGLE  Mute output"
+    [[ "$SINK_MUTED" == "yes" ]] && mute_label="$ICO_SINK  Unmute output"
+
+    local entries=(
+        "$header"
+        "─────────────────────────────────────────────"
+        "$ICO_VOL_UP  +1%"
+        "$ICO_VOL_UP  +5%"
+        "$ICO_VOL_UP  +10%"
+        "$ICO_VOL_DOWN  −1%"
+        "$ICO_VOL_DOWN  −5%"
+        "$ICO_VOL_DOWN  −10%"
+        "$mute_label"
+        "─────────────────────────────────────────────"
+        "$ICO_SINK  Set 0%"
+        "$ICO_SINK  Set 25%"
+        "$ICO_SINK  Set 50%"
+        "$ICO_SINK  Set 75%"
+        "$ICO_SINK  Set 100%"
+    )
+
+    local choice
+    choice=$(printf '%s\n' "${entries[@]}" | rofi_run -p "󰕾  Output volume" -no-custom -selected-row 0)
+    [[ -z "$choice" ]] && return
+
+    case "$choice" in
+        *"+1%") adjust_volume @DEFAULT_AUDIO_SINK@ 1%+ "Volume" ;;
+        *"+5%") adjust_volume @DEFAULT_AUDIO_SINK@ 5%+ "Volume" ;;
+        *"+10%") adjust_volume @DEFAULT_AUDIO_SINK@ 10%+ "Volume" ;;
+        *"−1%") adjust_volume @DEFAULT_AUDIO_SINK@ 1%- "Volume" ;;
+        *"−5%") adjust_volume @DEFAULT_AUDIO_SINK@ 5%- "Volume" ;;
+        *"−10%") adjust_volume @DEFAULT_AUDIO_SINK@ 10%- "Volume" ;;
+        *"Mute output")
+            wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
+            notify "Output muted"
+            ;;
+        *"Unmute output")
+            wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
+            notify "Output unmuted"
+            ;;
+        *"Set 0%") set_volume @DEFAULT_AUDIO_SINK@ 0% "Volume" ;;
+        *"Set 25%") set_volume @DEFAULT_AUDIO_SINK@ 25% "Volume" ;;
+        *"Set 50%") set_volume @DEFAULT_AUDIO_SINK@ 50% "Volume" ;;
+        *"Set 75%") set_volume @DEFAULT_AUDIO_SINK@ 75% "Volume" ;;
+        *"Set 100%") set_volume @DEFAULT_AUDIO_SINK@ 100% "Volume" ;;
+    esac
+}
+
+menu_input_volume() {
+    get_source_info
+
+    local src_ico="$ICO_MIC"
+    [[ "$SRC_MUTED" == "yes" ]] && src_ico="$ICO_MIC_MUTED"
+    local bar
+    bar=$(vol_bar "$SRC_VOL")
+
+    local header="$src_ico  ${SRC_VOL}%  $bar  $SRC_DESC"
+    [[ "$SRC_MUTED" == "yes" ]] && header="$ICO_MIC_MUTED  Muted  —  $SRC_DESC"
+
+    local mute_label="$ICO_MIC_MUTED  Mute microphone"
+    [[ "$SRC_MUTED" == "yes" ]] && mute_label="$ICO_MIC  Unmute microphone"
+
+    local entries=(
+        "$header"
+        "─────────────────────────────────────────────"
+        "$ICO_VOL_UP  +1%"
+        "$ICO_VOL_UP  +5%"
+        "$ICO_VOL_UP  +10%"
+        "$ICO_VOL_DOWN  −1%"
+        "$ICO_VOL_DOWN  −5%"
+        "$ICO_VOL_DOWN  −10%"
+        "$mute_label"
+        "─────────────────────────────────────────────"
+        "$ICO_MIC  Set 0%"
+        "$ICO_MIC  Set 25%"
+        "$ICO_MIC  Set 50%"
+        "$ICO_MIC  Set 75%"
+        "$ICO_MIC  Set 100%"
+    )
+
+    local choice
+    choice=$(printf '%s\n' "${entries[@]}" | rofi_run -p "󰍬  Mic volume" -no-custom -selected-row 0)
+    [[ -z "$choice" ]] && return
+
+    case "$choice" in
+        *"+1%") adjust_volume @DEFAULT_AUDIO_SOURCE@ 1%+ "Mic" ;;
+        *"+5%") adjust_volume @DEFAULT_AUDIO_SOURCE@ 5%+ "Mic" ;;
+        *"+10%") adjust_volume @DEFAULT_AUDIO_SOURCE@ 10%+ "Mic" ;;
+        *"−1%") adjust_volume @DEFAULT_AUDIO_SOURCE@ 1%- "Mic" ;;
+        *"−5%") adjust_volume @DEFAULT_AUDIO_SOURCE@ 5%- "Mic" ;;
+        *"−10%") adjust_volume @DEFAULT_AUDIO_SOURCE@ 10%- "Mic" ;;
+        *"Mute microphone")
+            wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
+            notify "Mic muted"
+            ;;
+        *"Unmute microphone")
+            wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
+            notify "Mic unmuted"
+            ;;
+        *"Set 0%") set_volume @DEFAULT_AUDIO_SOURCE@ 0% "Mic" ;;
+        *"Set 25%") set_volume @DEFAULT_AUDIO_SOURCE@ 25% "Mic" ;;
+        *"Set 50%") set_volume @DEFAULT_AUDIO_SOURCE@ 50% "Mic" ;;
+        *"Set 75%") set_volume @DEFAULT_AUDIO_SOURCE@ 75% "Mic" ;;
+        *"Set 100%") set_volume @DEFAULT_AUDIO_SOURCE@ 100% "Mic" ;;
+    esac
+}
 
 menu_set_sink() {
     local default
@@ -202,14 +325,10 @@ main() {
     local entries=(
         "$sink_line"
         "$src_line"
-        "─────────────────────────────────────"
-        "$ICO_VOL_UP  Volume +5%"
-        "$ICO_VOL_DOWN  Volume −5%"
+        "─────────────────────────────────────────────"
         "$mute_label"
-        "$ICO_MIC  Mic volume +5%"
-        "$ICO_MIC  Mic volume −5%"
         "$mic_mute_label"
-        "─────────────────────────────────────"
+        "─────────────────────────────────────────────"
         "$ICO_SINK  Switch output device"
         "$ICO_SOURCE  Switch input device"
     )
@@ -223,13 +342,11 @@ main() {
     [[ -z "$choice" ]] && exit 0
 
     case "$choice" in
-        *"Volume +5%")
-            wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+
-            notify "Volume: $(wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{printf "%d%%", $2*100}')"
+        "$sink_line")
+            menu_output_volume
             ;;
-        *"Volume −5%")
-            wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-
-            notify "Volume: $(wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{printf "%d%%", $2*100}')"
+        "$src_line")
+            menu_input_volume
             ;;
         *"Mute output")
             wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
@@ -238,14 +355,6 @@ main() {
         *"Unmute output")
             wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
             notify "Output unmuted"
-            ;;
-        *"Mic volume +5%")
-            wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 5%+
-            notify "Mic: $(wpctl get-volume @DEFAULT_AUDIO_SOURCE@ | awk '{printf "%d%%", $2*100}')"
-            ;;
-        *"Mic volume −5%")
-            wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 5%-
-            notify "Mic: $(wpctl get-volume @DEFAULT_AUDIO_SOURCE@ | awk '{printf "%d%%", $2*100}')"
             ;;
         *"Mute microphone")
             wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
@@ -262,7 +371,6 @@ main() {
             menu_set_source
             ;;
         *"─────"*)
-            # separator — do nothing
             ;;
     esac
 }

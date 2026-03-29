@@ -1,7 +1,7 @@
 * {
     font-family:
-        "JetBrains Mono Nerd Font", "JetBrains Mono", "FontAwesome 6 Free",
-        monospace;
+        "Caskaydia Mono Nerd Font", "JetBrains Mono Nerd Font",
+        "FontAwesome 6 Free", monospace;
     font-size: 14px;
     font-weight: 500;
     min-height: 0;
@@ -57,8 +57,10 @@ window#waybar.hidden {
 #language,
 #clock,
 #network,
-#custom-separator,
+#custom-bluetooth,
+#custom-clipboard,
 #tray,
+#custom-separator,
 #custom-power {
     color: @text;
     padding: 0 10px;
@@ -250,11 +252,27 @@ window#waybar.hidden {
     background: alpha(@red, 0.2);
 }
 
+/* Bluetooth */
+#custom-bluetooth {
+    font-size: 15px;
+    color: @blue;
+    background: alpha(@blue, 0.08);
+    border: 1px solid alpha(@blue, 0.2);
+    border-radius: 10px;
+    margin: 4px 2px;
+    padding: 0 12px;
+}
+
+#custom-bluetooth:hover {
+    background: alpha(@blue, 0.2);
+}
+
 /* Clipboard */
 #custom-clipboard {
     font-size: 15px;
     color: @teal;
     background: alpha(@teal, 0.08);
+    border: 1px solid alpha(@teal, 0.2);
     border-radius: 10px;
     margin: 4px 2px;
     padding: 0 12px;
