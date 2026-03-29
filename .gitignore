@@ -1,6 +1,7 @@
 *
 
 !btop/
+!dunst/
 !fish/
 !fontconfig/
 !hypr/
@@ -15,6 +16,7 @@
 !zed/
 
 !btop/**
+!dunst/**
 !fish/**
 !fontconfig/**
 !hypr/**

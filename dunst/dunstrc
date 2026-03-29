@@ -1,0 +1,98 @@
+# dunstrc — Catppuccin Mocha
+# ~/.config/dunst/dunstrc
+
+[global]
+    monitor = 0
+    follow = mouse
+
+    # Geometry
+    width = (0, 380)
+    height = (0, 200)
+    origin = top-right
+    offset = 14x56
+    scale = 0
+    notification_limit = 5
+
+    # Appearance
+    frame_color = "#45475a"
+    frame_width = 1
+    gap_size = 6
+    corner_radius = 12
+    icon_corner_radius = 6
+
+    background = "#1e1e2eee"
+    foreground = "#cdd6f4"
+
+    font = JetBrains Mono Nerd Font 12
+
+    # Text
+    markup = full
+    format = "<b>%s</b>\n%b"
+    alignment = left
+    vertical_alignment = center
+    word_wrap = yes
+    ignore_newline = no
+    ellipsize = middle
+    show_indicators = yes
+
+    # Icon
+    icon_theme = "Papirus-Dark, hicolor"
+    icon_position = left
+    min_icon_size = 32
+    max_icon_size = 48
+
+    # Behaviour
+    sort = urgency_descending
+    idle_threshold = 120
+    show_age_threshold = 60
+    sticky_history = yes
+    history_length = 20
+
+    # Timeouts (ms)
+    timeout = 5000
+
+    # Dmenu / browser
+    dmenu = /usr/bin/rofi -dmenu -theme ~/.config/rofi/catppuccin.rasi -p dunst
+    browser = /usr/bin/xdg-open
+
+    # Mouse
+    mouse_left_click = close_current
+    mouse_middle_click = do_action, close_current
+    mouse_right_click = close_all
+
+    # Progress bar
+    progress_bar = true
+    progress_bar_height = 8
+    progress_bar_frame_width = 1
+    progress_bar_min_width = 150
+    progress_bar_max_width = 300
+    progress_bar_corner_radius = 4
+
+    # Padding
+    padding = 12
+    horizontal_padding = 14
+    text_icon_padding = 10
+
+    separator_color = frame
+    separator_height = 1
+
+    transparency = 0
+
+[urgency_low]
+    background  = "#1e1e2eee"
+    foreground  = "#a6adc8"
+    frame_color = "#45475a"
+    timeout     = 4000
+    # icon = /usr/share/icons/Papirus-Dark/32x32/status/dialog-information.svg
+
+[urgency_normal]
+    background  = "#1e1e2eee"
+    foreground  = "#cdd6f4"
+    frame_color = "#89b4fa"
+    timeout     = 6000
+
+[urgency_critical]
+    background  = "#1e1e2eee"
+    foreground  = "#f38ba8"
+    frame_color = "#f38ba8"
+    timeout     = 0
