@@ -14,3 +14,7 @@ if status is-interactive
     alias zed zeditor
     alias q 'qs -c ii'
 end
+
+# bun
+set --export BUN_INSTALL "$HOME/.bun"
+set --export PATH $BUN_INSTALL/bin $PATH
